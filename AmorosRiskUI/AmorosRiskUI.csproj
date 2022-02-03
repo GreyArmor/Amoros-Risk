@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Page Remove="BasicUi\WindowRoot.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="BasicUi\WindowRoot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EmptyKeysUI_Generator" Version="3.3.0" />
+    <PackageReference Include="EmptyKeysUI_MonoGame" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="BasicUI\BasicUiRoot.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="BasicUI\StandardStyles.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>
