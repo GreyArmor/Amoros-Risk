@@ -3,21 +3,16 @@
 		   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		   xmlns:ek="clr-namespace:EmptyKeys.UserInterface.Designer;assembly=EmptyKeys.UserInterface.Designer"
-		   xmlns:basicui="clr-namespace:AmorosRiskUI.BasicUi"
-			mc:Ignorable="d" 
+		   xmlns:basicui="clr-namespace:AmorosRiskUI.BasicUi" xmlns:controls="clr-namespace:EmptyKeys.UserInterface.Controls;assembly=EmptyKeys.UserInterface" xmlns:animation="clr-namespace:EmptyKeys.UserInterface.Media.Animation;assembly=EmptyKeys.UserInterface"
+		   mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="1366" Background="CornflowerBlue">
 	<ek:UIRoot.Resources>
-		<Style x:Key="buttonStyle" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-			<Setter Property="Foreground" Value="white"/>
-			<Setter Property="Background" Value="DarkOrange"/>
-			<Setter Property="Margin" Value="5"></Setter>
-		</Style>
 
-		<Style x:Key="buttonAnimStyle" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-			<Setter Property="Margin" Value="5"></Setter>
-			<Setter Property="SnapsToDevicePixels" Value="False" />
+		<Style x:Key="gridImageStyle" TargetType="Image">
+			<Setter Property="Width" Value="auto" />
+			<Setter Property="Margin" Value="0,1,0,1" />
 			<Style.Triggers>
-				<EventTrigger RoutedEvent="Button.MouseEnter">
+				<EventTrigger RoutedEvent="Image.MouseEnter">
 					<BeginStoryboard>
 						<Storyboard>
 							<ThicknessAnimation                                
@@ -26,20 +21,12 @@
 								<ThicknessAnimation.EasingFunction>
 									<SineEase />
 								</ThicknessAnimation.EasingFunction>
-							</ThicknessAnimation>
-
-							<DoubleAnimation
-                                Storyboard.TargetProperty="Width"
-                                To="220" Duration="0:0:0.5">
-								<DoubleAnimation.EasingFunction>
-									<SineEase />
-								</DoubleAnimation.EasingFunction>
-							</DoubleAnimation>
+							</ThicknessAnimation>							
 						</Storyboard>
 					</BeginStoryboard>
 				</EventTrigger>
 
-				<EventTrigger RoutedEvent="Button.MouseLeave">
+				<EventTrigger RoutedEvent="Image.MouseLeave">
 					<BeginStoryboard>
 						<Storyboard>
 							<ThicknessAnimation                                
@@ -60,9 +47,7 @@
 						</Storyboard>
 					</BeginStoryboard>
 				</EventTrigger>
-
-
-			</Style.Triggers>
+			</Style.Triggers>	
 		</Style>
 
 	</ek:UIRoot.Resources>
@@ -85,15 +70,22 @@
 				<Grid.RowDefinitions>
 					<RowDefinition></RowDefinition>
 					<RowDefinition></RowDefinition>
-					<RowDefinition></RowDefinition>
-					<RowDefinition></RowDefinition>
 				</Grid.RowDefinitions>
+				<Grid Grid.Row="0">
+					<Image x:Name="image" Style="{DynamicResource gridImageStyle}" Grid.Row="0" Margin="5" Stretch="Fill" HorizontalAlignment="Center">
+						<Image.Source>
+							<BitmapImage UriSource="Images\\PlayButtonRisk.png" />
+						</Image.Source>						
+					</Image>
+				</Grid>
+				<Grid Grid.Row="1">
+					<Image  Style="{DynamicResource gridImageStyle}" Grid.Row="1" Margin="5" Stretch="Fill" HorizontalAlignment="Center">
+						<Image.Source>
+							<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>						
+						</Image.Source>						
 
-				<Button Style="{StaticResource buttonAnimStyle}" Grid.Row="0" Content="New game"></Button>
-				<Button Style="{StaticResource buttonAnimStyle}" Grid.Row="1" Content="Multiplayer"></Button>
-				<Button Style="{StaticResource buttonAnimStyle}" Grid.Row="2" Content="Highscores"></Button>
-				<Button Style="{StaticResource buttonAnimStyle}" Grid.Row="3" Content="Exit"></Button>
-
+					</Image>
+				</Grid>
 			</Grid>
 
 		</Grid>
