@@ -8,11 +8,11 @@
              d:DesignHeight="768" d:DesignWidth="1366" Background="CornflowerBlue">
 	<ek:UIRoot.Resources>
 
-		<Style x:Key="gridImageStyle" TargetType="Image">
+		<Style x:Key="gridImageStyle" TargetType="ek:ImageButton">
 			<Setter Property="Width" Value="auto" />
 			<Setter Property="Margin" Value="0,1,0,1" />
 			<Style.Triggers>
-				<EventTrigger RoutedEvent="Image.MouseEnter">
+				<EventTrigger RoutedEvent="ek:ImageButton.MouseEnter">
 					<BeginStoryboard>
 						<Storyboard>
 							<ThicknessAnimation                                
@@ -26,7 +26,7 @@
 					</BeginStoryboard>
 				</EventTrigger>
 
-				<EventTrigger RoutedEvent="Image.MouseLeave">
+				<EventTrigger RoutedEvent="ek:ImageButton.MouseLeave">
 					<BeginStoryboard>
 						<Storyboard>
 							<ThicknessAnimation                                
@@ -71,10 +71,48 @@
 					<RowDefinition></RowDefinition>
 					<RowDefinition></RowDefinition>
 				</Grid.RowDefinitions>
-				<Grid Grid.Row="0">
+
+				<ek:ImageButton Grid.Row="0" ImageStretch="Fill" Margin="5" Height="auto" Width="auto" Style="{DynamicResource gridImageStyle}">
+					<ek:ImageButton.ImageNormal>
+						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
+					</ek:ImageButton.ImageNormal>
+
+					<ek:ImageButton.ImageHover>
+						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
+					</ek:ImageButton.ImageHover>
+
+					<ek:ImageButton.ImageDisabled>
+						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
+					</ek:ImageButton.ImageDisabled>
+
+					<ek:ImageButton.ImagePressed>
+						<BitmapImage UriSource="Images\\CreditButtonRiskPressed.png"/>
+					</ek:ImageButton.ImagePressed>
+				</ek:ImageButton>
+
+				<ek:ImageButton Grid.Row="1"  ImageStretch="Fill" Margin="5" Height="auto" Width="auto"  Style="{DynamicResource gridImageStyle}">
+					<ek:ImageButton.ImageNormal>
+						<BitmapImage UriSource="Images\\PlayButtonRisk.png"/>
+					</ek:ImageButton.ImageNormal>
+
+					<ek:ImageButton.ImageHover>
+						<BitmapImage UriSource="Images\\PlayButtonRisk.png"/>
+					</ek:ImageButton.ImageHover>
+
+					<ek:ImageButton.ImageDisabled>
+						<BitmapImage UriSource="Images\\PlayButtonRisk.png"/>
+					</ek:ImageButton.ImageDisabled>
+
+					<ek:ImageButton.ImagePressed>
+						<BitmapImage UriSource="Images\\PlayButtonRiskPressed.png"/>
+					</ek:ImageButton.ImagePressed>
+				</ek:ImageButton>
+
+
+				<!--<Grid Grid.Row="0">
 					<Image x:Name="image" Style="{DynamicResource gridImageStyle}" Grid.Row="0" Margin="5" Stretch="Fill" HorizontalAlignment="Center">
 						<Image.Source>
-							<BitmapImage UriSource="Images\\PlayButtonRisk.png" />
+							UriSource="Images\\PlayButtonRisk.png"
 						</Image.Source>						
 					</Image>
 				</Grid>
@@ -83,9 +121,8 @@
 						<Image.Source>
 							<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>						
 						</Image.Source>						
-
 					</Image>
-				</Grid>
+				</Grid>-->
 			</Grid>
 
 		</Grid>

@@ -33,13 +33,9 @@ namespace EmptyKeys.UserInterface.Generated {
         
         private Grid e_2;
         
-        private Grid e_3;
+        private ImageButton e_3;
         
-        private Image image;
-        
-        private Grid e_4;
-        
-        private Image e_5;
+        private ImageButton e_4;
         
         public WindowRoot() : 
                 base() {
@@ -93,51 +89,63 @@ namespace EmptyKeys.UserInterface.Generated {
             this.e_2.RowDefinitions.Add(row_e_2_1);
             Grid.SetRow(this.e_2, 1);
             // e_3 element
-            this.e_3 = new Grid();
+            this.e_3 = new ImageButton();
             this.e_2.Children.Add(this.e_3);
             this.e_3.Name = "e_3";
+            this.e_3.Height = float.NaN;
+            this.e_3.Width = float.NaN;
+            this.e_3.Margin = new Thickness(5F, 5F, 5F, 5F);
+            this.e_3.ImageStretch = Stretch.Fill;
+            BitmapImage e_3_normal_bm = new BitmapImage();
+            e_3_normal_bm.TextureAsset = "Images\\\\CreditButtonRisk";
+            this.e_3.ImageNormal = e_3_normal_bm;
+            BitmapImage e_3_disabled_bm = new BitmapImage();
+            e_3_disabled_bm.TextureAsset = "Images\\\\CreditButtonRisk";
+            this.e_3.ImageDisabled = e_3_disabled_bm;
+            BitmapImage e_3_hover_bm = new BitmapImage();
+            e_3_hover_bm.TextureAsset = "Images\\\\CreditButtonRisk";
+            this.e_3.ImageHover = e_3_hover_bm;
+            BitmapImage e_3_pressed_bm = new BitmapImage();
+            e_3_pressed_bm.TextureAsset = "Images\\\\CreditButtonRiskPressed";
+            this.e_3.ImagePressed = e_3_pressed_bm;
             Grid.SetRow(this.e_3, 0);
-            // image element
-            this.image = new Image();
-            this.e_3.Children.Add(this.image);
-            this.image.Name = "image";
-            this.image.Margin = new Thickness(5F, 5F, 5F, 5F);
-            this.image.HorizontalAlignment = HorizontalAlignment.Center;
-            BitmapImage image_bm = new BitmapImage();
-            image_bm.TextureAsset = "Images\\\\PlayButtonRisk";
-            this.image.Source = image_bm;
-            this.image.Stretch = Stretch.Fill;
-            Grid.SetRow(this.image, 0);
-            this.image.SetResourceReference(Image.StyleProperty, "gridImageStyle");
+            this.e_3.SetResourceReference(ImageButton.StyleProperty, "gridImageStyle");
             // e_4 element
-            this.e_4 = new Grid();
+            this.e_4 = new ImageButton();
             this.e_2.Children.Add(this.e_4);
             this.e_4.Name = "e_4";
+            this.e_4.Height = float.NaN;
+            this.e_4.Width = float.NaN;
+            this.e_4.Margin = new Thickness(5F, 5F, 5F, 5F);
+            this.e_4.ImageStretch = Stretch.Fill;
+            BitmapImage e_4_normal_bm = new BitmapImage();
+            e_4_normal_bm.TextureAsset = "Images\\\\PlayButtonRisk";
+            this.e_4.ImageNormal = e_4_normal_bm;
+            BitmapImage e_4_disabled_bm = new BitmapImage();
+            e_4_disabled_bm.TextureAsset = "Images\\\\PlayButtonRisk";
+            this.e_4.ImageDisabled = e_4_disabled_bm;
+            BitmapImage e_4_hover_bm = new BitmapImage();
+            e_4_hover_bm.TextureAsset = "Images\\\\PlayButtonRisk";
+            this.e_4.ImageHover = e_4_hover_bm;
+            BitmapImage e_4_pressed_bm = new BitmapImage();
+            e_4_pressed_bm.TextureAsset = "Images\\\\PlayButtonRiskPressed";
+            this.e_4.ImagePressed = e_4_pressed_bm;
             Grid.SetRow(this.e_4, 1);
-            // e_5 element
-            this.e_5 = new Image();
-            this.e_4.Children.Add(this.e_5);
-            this.e_5.Name = "e_5";
-            this.e_5.Margin = new Thickness(5F, 5F, 5F, 5F);
-            this.e_5.HorizontalAlignment = HorizontalAlignment.Center;
-            BitmapImage e_5_bm = new BitmapImage();
-            e_5_bm.TextureAsset = "Images\\\\CreditButtonRisk";
-            this.e_5.Source = e_5_bm;
-            this.e_5.Stretch = Stretch.Fill;
-            Grid.SetRow(this.e_5, 1);
-            this.e_5.SetResourceReference(Image.StyleProperty, "gridImageStyle");
-            ImageManager.Instance.AddImage("Images\\\\PlayButtonRisk");
+            this.e_4.SetResourceReference(ImageButton.StyleProperty, "gridImageStyle");
             ImageManager.Instance.AddImage("Images\\\\CreditButtonRisk");
+            ImageManager.Instance.AddImage("Images\\\\CreditButtonRiskPressed");
+            ImageManager.Instance.AddImage("Images\\\\PlayButtonRisk");
+            ImageManager.Instance.AddImage("Images\\\\PlayButtonRiskPressed");
         }
         
         private static void InitializeElementResources(UIElement elem) {
             // Resource - [gridImageStyle] Style
-            Style r_0_s = new Style(typeof(Image));
-            Setter r_0_s_S_0 = new Setter(Image.WidthProperty, float.NaN);
+            Style r_0_s = new Style(typeof(ImageButton));
+            Setter r_0_s_S_0 = new Setter(ImageButton.WidthProperty, float.NaN);
             r_0_s.Setters.Add(r_0_s_S_0);
-            Setter r_0_s_S_1 = new Setter(Image.MarginProperty, new Thickness(0F, 1F, 0F, 1F));
+            Setter r_0_s_S_1 = new Setter(ImageButton.MarginProperty, new Thickness(0F, 1F, 0F, 1F));
             r_0_s.Setters.Add(r_0_s_S_1);
-            EventTrigger r_0_s_ET_0 = new EventTrigger(Image.MouseEnterEvent);
+            EventTrigger r_0_s_ET_0 = new EventTrigger(ImageButton.MouseEnterEvent);
             r_0_s.Triggers.Add(r_0_s_ET_0);
             BeginStoryboard r_0_s_ET_0_AC_0 = new BeginStoryboard();
             r_0_s_ET_0_AC_0.Name = "r_0_s_ET_0_AC_0";
@@ -152,9 +160,9 @@ namespace EmptyKeys.UserInterface.Generated {
             r_0_s_ET_0_AC_0_SB_TL_0.To = new Thickness(0F, 5F, 0F, 5F);
             SineEase r_0_s_ET_0_AC_0_SB_TL_0_EA = new SineEase();
             r_0_s_ET_0_AC_0_SB_TL_0.EasingFunction = r_0_s_ET_0_AC_0_SB_TL_0_EA;
-            Storyboard.SetTargetProperty(r_0_s_ET_0_AC_0_SB_TL_0, Image.MarginProperty);
+            Storyboard.SetTargetProperty(r_0_s_ET_0_AC_0_SB_TL_0, ImageButton.MarginProperty);
             r_0_s_ET_0_AC_0_SB.Children.Add(r_0_s_ET_0_AC_0_SB_TL_0);
-            EventTrigger r_0_s_ET_1 = new EventTrigger(Image.MouseLeaveEvent);
+            EventTrigger r_0_s_ET_1 = new EventTrigger(ImageButton.MouseLeaveEvent);
             r_0_s.Triggers.Add(r_0_s_ET_1);
             BeginStoryboard r_0_s_ET_1_AC_0 = new BeginStoryboard();
             r_0_s_ET_1_AC_0.Name = "r_0_s_ET_1_AC_0";
@@ -169,7 +177,7 @@ namespace EmptyKeys.UserInterface.Generated {
             r_0_s_ET_1_AC_0_SB_TL_0.To = new Thickness(0F, 1F, 0F, 1F);
             SineEase r_0_s_ET_1_AC_0_SB_TL_0_EA = new SineEase();
             r_0_s_ET_1_AC_0_SB_TL_0.EasingFunction = r_0_s_ET_1_AC_0_SB_TL_0_EA;
-            Storyboard.SetTargetProperty(r_0_s_ET_1_AC_0_SB_TL_0, Image.MarginProperty);
+            Storyboard.SetTargetProperty(r_0_s_ET_1_AC_0_SB_TL_0, ImageButton.MarginProperty);
             r_0_s_ET_1_AC_0_SB.Children.Add(r_0_s_ET_1_AC_0_SB_TL_0);
             FloatAnimation r_0_s_ET_1_AC_0_SB_TL_1 = new FloatAnimation();
             r_0_s_ET_1_AC_0_SB_TL_1.Name = "r_0_s_ET_1_AC_0_SB_TL_1";
@@ -177,7 +185,7 @@ namespace EmptyKeys.UserInterface.Generated {
             r_0_s_ET_1_AC_0_SB_TL_1.To = 200F;
             SineEase r_0_s_ET_1_AC_0_SB_TL_1_EA = new SineEase();
             r_0_s_ET_1_AC_0_SB_TL_1.EasingFunction = r_0_s_ET_1_AC_0_SB_TL_1_EA;
-            Storyboard.SetTargetProperty(r_0_s_ET_1_AC_0_SB_TL_1, Image.WidthProperty);
+            Storyboard.SetTargetProperty(r_0_s_ET_1_AC_0_SB_TL_1, ImageButton.WidthProperty);
             r_0_s_ET_1_AC_0_SB.Children.Add(r_0_s_ET_1_AC_0_SB_TL_1);
             elem.Resources.Add("gridImageStyle", r_0_s);
         }

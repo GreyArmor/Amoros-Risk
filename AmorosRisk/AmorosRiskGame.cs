@@ -34,7 +34,7 @@ namespace AmorosRisk
             graphics.PreparingDeviceSettings += graphics_PreparingDeviceSettings;
             graphics.DeviceCreated += graphics_DeviceCreated;
             Window.ClientSizeChanged += Window_ClientSizeChanged;
-          //  Window.AllowUserResizing = true;
+            Window.AllowUserResizing = true;
         }
 
         private void Window_ClientSizeChanged(object sender, EventArgs e)
@@ -43,6 +43,9 @@ namespace AmorosRisk
             {
                 Viewport viewPort = GraphicsDevice.Viewport;
                 basicUI.Resize(viewPort.Width, viewPort.Height);
+              //  graphics.PreferredBackBufferWidth = 
+                //basicUI = new EmptyKeys.UserInterface.Generated.WindowRoot(viewPort.Width, viewPort.Height);
+
             }
         }
 
@@ -166,7 +169,7 @@ namespace AmorosRisk
             //color.G = (byte)random.Next(0, 255);
             //color.B = (byte)random.Next(0, 255);
             //GraphicsDevice.Clear(color);
-            //GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.SetRenderTarget(null);
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 

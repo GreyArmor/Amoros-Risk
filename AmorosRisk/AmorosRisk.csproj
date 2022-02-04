@@ -12,10 +12,18 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\Images\CreditButtonRisk.png" />
+    <None Remove="Content\Images\CreditButtonRiskPressed.png" />
     <None Remove="Content\Images\PlayButtonRisk.png" />
+    <None Remove="Content\Images\PlayButtonRiskPressed.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\CreditButtonRiskPressed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Images\CreditButtonRisk.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\PlayButtonRiskPressed.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Images\PlayButtonRisk.png">
