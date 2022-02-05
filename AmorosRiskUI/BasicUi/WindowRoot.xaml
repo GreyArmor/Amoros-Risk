@@ -72,7 +72,7 @@
 					<RowDefinition></RowDefinition>
 				</Grid.RowDefinitions>
 
-				<ek:ImageButton Grid.Row="0" ImageStretch="Fill" Margin="5" Height="auto" Width="auto" Style="{DynamicResource gridImageStyle}">
+				<ek:ImageButton Grid.Row="1" Margin="5" Height="auto" Width="auto" Style="{DynamicResource gridImageStyle}">
 					<ek:ImageButton.ImageNormal>
 						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
 					</ek:ImageButton.ImageNormal>
@@ -90,7 +90,7 @@
 					</ek:ImageButton.ImagePressed>
 				</ek:ImageButton>
 
-				<ek:ImageButton Grid.Row="1"  ImageStretch="Fill" Margin="5" Height="auto" Width="auto"  Style="{DynamicResource gridImageStyle}">
+				<ek:ImageButton Grid.Row="0" Margin="5" Height="auto" Width="auto"  Style="{DynamicResource gridImageStyle}">
 					<ek:ImageButton.ImageNormal>
 						<BitmapImage UriSource="Images\\PlayButtonRisk.png"/>
 					</ek:ImageButton.ImageNormal>

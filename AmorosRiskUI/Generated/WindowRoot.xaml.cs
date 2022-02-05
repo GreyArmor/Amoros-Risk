@@ -95,7 +95,6 @@ namespace EmptyKeys.UserInterface.Generated {
             this.e_3.Height = float.NaN;
             this.e_3.Width = float.NaN;
             this.e_3.Margin = new Thickness(5F, 5F, 5F, 5F);
-            this.e_3.ImageStretch = Stretch.Fill;
             BitmapImage e_3_normal_bm = new BitmapImage();
             e_3_normal_bm.TextureAsset = "Images\\\\CreditButtonRisk";
             this.e_3.ImageNormal = e_3_normal_bm;
@@ -108,7 +107,7 @@ namespace EmptyKeys.UserInterface.Generated {
             BitmapImage e_3_pressed_bm = new BitmapImage();
             e_3_pressed_bm.TextureAsset = "Images\\\\CreditButtonRiskPressed";
             this.e_3.ImagePressed = e_3_pressed_bm;
-            Grid.SetRow(this.e_3, 0);
+            Grid.SetRow(this.e_3, 1);
             this.e_3.SetResourceReference(ImageButton.StyleProperty, "gridImageStyle");
             // e_4 element
             this.e_4 = new ImageButton();
@@ -117,7 +116,6 @@ namespace EmptyKeys.UserInterface.Generated {
             this.e_4.Height = float.NaN;
             this.e_4.Width = float.NaN;
             this.e_4.Margin = new Thickness(5F, 5F, 5F, 5F);
-            this.e_4.ImageStretch = Stretch.Fill;
             BitmapImage e_4_normal_bm = new BitmapImage();
             e_4_normal_bm.TextureAsset = "Images\\\\PlayButtonRisk";
             this.e_4.ImageNormal = e_4_normal_bm;
@@ -130,7 +128,7 @@ namespace EmptyKeys.UserInterface.Generated {
             BitmapImage e_4_pressed_bm = new BitmapImage();
             e_4_pressed_bm.TextureAsset = "Images\\\\PlayButtonRiskPressed";
             this.e_4.ImagePressed = e_4_pressed_bm;
-            Grid.SetRow(this.e_4, 1);
+            Grid.SetRow(this.e_4, 0);
             this.e_4.SetResourceReference(ImageButton.StyleProperty, "gridImageStyle");
             ImageManager.Instance.AddImage("Images\\\\CreditButtonRisk");
             ImageManager.Instance.AddImage("Images\\\\CreditButtonRiskPressed");
