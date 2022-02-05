@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using EmptyKeys.UserInterface.Generated;
 using System;
+using MonoGame.Extended;
+using MonoGame.Extended.Entities;
 
 namespace AmorosRisk
 {
@@ -19,10 +21,13 @@ namespace AmorosRisk
 
         private int nativeScreenWidth;
         private int nativeScreenHeight;
-        private RenderTarget2D renderTarget;
 
         private EmptyKeys.UserInterface.Generated.WindowRoot basicUI;
         private BasicUiRootViewModel viewModel;
+
+        WorldBuilder _world = new WorldBuilder();
+
+
 
         public AmorosRiskGame()
             : base()
@@ -91,6 +96,10 @@ namespace AmorosRisk
             FontManager.DefaultFont = Engine.Instance.Renderer.CreateFont(font);
             Viewport viewport = GraphicsDevice.Viewport;
             basicUI = new EmptyKeys.UserInterface.Generated.WindowRoot(viewport.Width, viewport.Height);
+
+            RelayCommand resizeCommand = new RelayCommand(new Action<object>(OnResize));
+            KeyBinding resizeBinding = new KeyBinding(resizeCommand, KeyCode.R, ModifierKeys.Control);
+            basicUI.InputBindings.Add(resizeBinding);
             viewModel = new BasicUiRootViewModel();
             basicUI.DataContext = viewModel;
 
@@ -101,20 +110,6 @@ namespace AmorosRisk
 
             RelayCommand command = new RelayCommand(new Action<object>(ExitEvent));
 
-            RelayCommand resizeCommand = new RelayCommand(new Action<object>(OnResize));
-            KeyBinding resizeBinding = new KeyBinding(resizeCommand, KeyCode.R, ModifierKeys.Control);
-            basicUI.InputBindings.Add(resizeBinding);
-
-            renderTarget = new RenderTarget2D(GraphicsDevice,
-                100,
-                100,
-                false,
-                GraphicsDevice.PresentationParameters.BackBufferFormat,
-                DepthFormat.Depth24Stencil8);
-
-          //  viewModel.RenderTargetSource = new BitmapImage();
-            var texture = Engine.Instance.Renderer.CreateTexture(renderTarget);
-          //  viewModel.RenderTargetSource.Texture = texture;
         }
 
         private void OnResize(object obj)
@@ -145,6 +140,10 @@ namespace AmorosRisk
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            
+
+            //_world.AddSystem(
+
            // debug.Update();
             basicUI.UpdateInput(gameTime.ElapsedGameTime.TotalMilliseconds);
 
