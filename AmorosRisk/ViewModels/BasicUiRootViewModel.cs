@@ -2,7 +2,7 @@
 
 namespace AmorosRisk
 {
-	public class BasicUiRootViewModel : ViewModelBase
+	public class MainMenuScreenViewModel : ViewModelBase
 	{		
 	}
 }

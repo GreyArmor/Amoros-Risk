@@ -7,6 +7,6 @@ namespace AmorosRisk.Components.UIComponents
 {
 	class UiScreenComponent
 	{
-		UIRoot WindowRoot;
+		public UIRoot WindowRoot { get; set; }
 	}
 }

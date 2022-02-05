@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AmorosRisk;
 using AmorosRisk.Components.Input;
+using AmorosRisk.Infrastructure;
 using AmorosRisk.Infrastructure.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -14,15 +15,16 @@ namespace NamelessRogue.Engine.Systems
     {
 
         IKeyIntentTraslator translator;
-        private readonly AmorosRiskGame namelessGame;
+        private readonly AmorosRiskGame game;
+		private readonly SystemContext context;
 
-
-        public InputSystem(IKeyIntentTraslator translator, AmorosRiskGame namelessGame) : base(Aspect.All(typeof(InputComponent), typeof(InputReceiver)))
+		public InputSystem(IKeyIntentTraslator translator, AmorosRiskGame game, SystemContext context) : base(Aspect.All(typeof(InputComponent), typeof(InputReceiver)))
         {
             this.translator = translator;
-            this.namelessGame = namelessGame;
-            namelessGame.Window.TextInput += WindowOnTextInput;
-			namelessGame.Window.KeyDown += Window_KeyDown;
+            this.game = game;
+            this.context = context;
+            game.Window.TextInput += WindowOnTextInput;
+            game.Window.KeyDown += Window_KeyDown;
         }
 
 		private void Window_KeyDown(object sender, InputKeyEventArgs e)
@@ -48,6 +50,8 @@ namespace NamelessRogue.Engine.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+            if (game.Context != context) return;
+
             if (gameTime.ElapsedGameTime.TotalMilliseconds - previousGametimeForMove > inputsTimeLimit)
             {
                 previousGametimeForMove = gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -70,21 +74,5 @@ namespace NamelessRogue.Engine.Systems
             _inputComponentMapper = mapperService.GetMapper<InputComponent>();
             _inpurReceiverMapper = mapperService.GetMapper<InputReceiver>();
         }
-
-		//public void keyPressed(KeyEvent e)
-		//{
-		//    pressedKeys = new List<>();
-		//    pressedKeys.Add(e);
-		//}
-
-		//public void keyReleased(KeyEvent e)
-		//{
-		//    Optional<KeyEvent> key = pressedKeys.stream().filter(x => x.getKeyCode() == e.getKeyCode()).findFirst();
-		//    if (key.isPresent())
-		//    {
-		//        pressedKeys.Remove(key.get());
-		//    }
-		//}
-
 	}
 }

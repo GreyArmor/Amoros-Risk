@@ -10,6 +10,11 @@ using EmptyKeys.UserInterface.Generated;
 using System;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
+using AmorosRisk.Infrastructure;
+using NamelessRogue.Engine.Systems;
+using AmorosRisk.Infrastructure.Input;
+using AmorosRisk.Systems;
+using AmorosRisk.Components.UIComponents;
 
 namespace AmorosRisk
 {
@@ -22,11 +27,8 @@ namespace AmorosRisk
         private int nativeScreenWidth;
         private int nativeScreenHeight;
 
-        private EmptyKeys.UserInterface.Generated.WindowRoot basicUI;
-        private BasicUiRootViewModel viewModel;
-
-        WorldBuilder _world = new WorldBuilder();
-
+        World _world;
+        public SystemContext Context { get; set; }
 
 
         public AmorosRiskGame()
@@ -44,14 +46,11 @@ namespace AmorosRisk
 
         private void Window_ClientSizeChanged(object sender, EventArgs e)
         {
-            if (basicUI != null)
-            {
-                Viewport viewPort = GraphicsDevice.Viewport;
-                basicUI.Resize(viewPort.Width, viewPort.Height);
-              //  graphics.PreferredBackBufferWidth = 
-                //basicUI = new EmptyKeys.UserInterface.Generated.WindowRoot(viewPort.Width, viewPort.Height);
-
-            }
+            //if (basicUI != null)
+            //{
+            //    Viewport viewPort = GraphicsDevice.Viewport;
+            //    basicUI.Resize(viewPort.Width, viewPort.Height);
+            //}
         }
 
         void graphics_DeviceCreated(object sender, EventArgs e)
@@ -79,7 +78,33 @@ namespace AmorosRisk
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+
+            Context = SystemContext.MainMenu;
+
+            _world = new WorldBuilder()
+                //main menu systems setup
+                .AddSystem(new InputSystem(new MainMenuKeyIntentTranslator(),this, SystemContext.MainMenu))
+                .AddSystem(new MainMenuInputSystem(this, SystemContext.MainMenu))
+                .AddSystem(new MainMenuUiDrawSystem(this, SystemContext.MainMenu))
+                .Build();
+
+            Viewport viewport = GraphicsDevice.Viewport;
+
+            var basicUI = new EmptyKeys.UserInterface.Generated.WindowRoot(viewport.Width, viewport.Height);
+
+            RelayCommand resizeCommand = new RelayCommand(new Action<object>(OnResize));
+            KeyBinding resizeBinding = new KeyBinding(resizeCommand, KeyCode.R, ModifierKeys.Control);
+            basicUI.InputBindings.Add(resizeBinding);
+            var viewModel = new MainMenuScreenViewModel();
+            basicUI.DataContext = viewModel;
+            basicUI.Resize(viewport.Width, viewport.Height);
+
+            var mainMenuUiScreenComponent = new UiScreenComponent() { WindowRoot = basicUI };
+            var mainMenuUiTag = new MainMenuUi();
+            var mainMenuEntity = _world.CreateEntity();
+            mainMenuEntity.Attach(mainMenuUiScreenComponent);
+            mainMenuEntity.Attach(mainMenuUiTag);
+
 
             base.Initialize();
         }
@@ -94,14 +119,8 @@ namespace AmorosRisk
 
             SpriteFont font = Content.Load<SpriteFont>("Segoe_UI_10_Regular");
             FontManager.DefaultFont = Engine.Instance.Renderer.CreateFont(font);
-            Viewport viewport = GraphicsDevice.Viewport;
-            basicUI = new EmptyKeys.UserInterface.Generated.WindowRoot(viewport.Width, viewport.Height);
+                
 
-            RelayCommand resizeCommand = new RelayCommand(new Action<object>(OnResize));
-            KeyBinding resizeBinding = new KeyBinding(resizeCommand, KeyCode.R, ModifierKeys.Control);
-            basicUI.InputBindings.Add(resizeBinding);
-            viewModel = new BasicUiRootViewModel();
-            basicUI.DataContext = viewModel;
 
             FontManager.Instance.LoadFonts(Content);
             ImageManager.Instance.LoadImages(Content);
@@ -140,19 +159,8 @@ namespace AmorosRisk
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            
-
-            //_world.AddSystem(
-
-           // debug.Update();
-            basicUI.UpdateInput(gameTime.ElapsedGameTime.TotalMilliseconds);
-
-           // viewModel.Update(gameTime.ElapsedGameTime.TotalMilliseconds);
-            basicUI.UpdateLayout(gameTime.ElapsedGameTime.TotalMilliseconds);
-
+            _world.Update(gameTime);
             base.Update(gameTime);
-
-
         }
 
         /// <summary>
@@ -161,19 +169,9 @@ namespace AmorosRisk
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-           // GraphicsDevice.SetRenderTarget(renderTarget);
-            //Color color = new Color();
-            //color.A = 255;
-            //color.R = (byte)random.Next(0, 255);
-            //color.G = (byte)random.Next(0, 255);
-            //color.B = (byte)random.Next(0, 255);
-            //GraphicsDevice.Clear(color);
             GraphicsDevice.SetRenderTarget(null);
-
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            basicUI.Draw(gameTime.ElapsedGameTime.TotalMilliseconds);
-           // debug.Draw();
+            _world.Draw(gameTime);
             base.Draw(gameTime);
         }
     }
