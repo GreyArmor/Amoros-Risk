@@ -24,21 +24,21 @@ namespace AmorosRisk.Systems
 		public override void Draw(GameTime gameTime)
 		{
 			if (game.Context != context) return;
+			var spriteBatch = game.SpriteBatch;
 
+			var cameraPosition = _positionMapper.Get(game.PlayerEntityId).Position;
+
+			spriteBatch.Begin(transformMatrix:Matrix.CreateTranslation(cameraPosition.X,cameraPosition.Y,0));
 			foreach (var entityId in ActiveEntities)
 			{
 				var positio = _positionMapper.Get(entityId);
 				var sprite = _spriteMapper.Get(entityId);
-				var map = game.Content.Load<Texture2D>("Images\\"+sprite.SpriteName);
-
-				var spriteBatch = game.SpriteBatch;
-
-
-				spriteBatch.Begin();
+				var map = game.Content.Load<Texture2D>("Images\\" + sprite.SpriteName);
 				spriteBatch.Draw(map, new Rectangle((int)positio.Position.X, (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
-				spriteBatch.End();
+
 
 			}
+			spriteBatch.End();
 		}
 
 		public override void Initialize(IComponentMapperService mapperService)

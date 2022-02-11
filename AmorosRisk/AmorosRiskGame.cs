@@ -11,7 +11,6 @@ using System;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using AmorosRisk.Infrastructure;
-using NamelessRogue.Engine.Systems;
 using AmorosRisk.Infrastructure.Input;
 using AmorosRisk.Systems;
 using AmorosRisk.Components.UIComponents;
@@ -19,6 +18,8 @@ using EmptyKeys.UserInterface.Mvvm;
 using EmptyKeys.UserInterface.Controls;
 using AmorosRisk.ViewModels;
 using AmorosRisk.Components.IngameObjects;
+using AmorosRisk.Components.Player;
+using AmorosRisk.Components.Input;
 
 namespace AmorosRisk
 {
@@ -33,7 +34,7 @@ namespace AmorosRisk
 
         WindowRoot _root;
         RootViewModel _rootViewModel = new RootViewModel();
-        World _world;
+		private World _world;
         InGameMenu _ingameMenu;
         SpriteBatch spriteBatch;
 
@@ -42,6 +43,7 @@ namespace AmorosRisk
 
         public WindowRoot UiRoot { get; private set; }
 		public SpriteBatch SpriteBatch { get => spriteBatch; set => spriteBatch = value; }
+		public World World { get => _world; private set => _world = value; }
 
 		private MainMenu _mainMenu;
 
@@ -95,11 +97,15 @@ namespace AmorosRisk
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             Context = SystemContext.MainMenu;
-
+            Commander = new Commander();
             _world = new WorldBuilder()
                 //ui systems setup
-                .AddSystem(new InputSystem(new MainMenuKeyIntentTranslator(), this, SystemContext.MainMenu))
+                .AddSystem(new InputSystem(new IngameKeyIntentTraslator(), this, SystemContext.InGame))
+                .AddSystem(new InGameIntentSystem(this, SystemContext.InGame))
                 .AddSystem(new UiInputSystem(this))
+
+                .AddSystem(new CameraSystem(this, SystemContext.InGame))
+
                 .AddSystem(new UiDrawSystem(this))
                 //map draw
                 .AddSystem(new MapDrawSystem(this, SystemContext.InGame))
@@ -130,7 +136,7 @@ namespace AmorosRisk
             _root.Resize(viewport.Width, viewport.Height);
 
             //create a map
-            var mapSprite = new SpriteComponent() { SpriteName = "placeholder_political_world_maphd", Size = new Vector2(viewport.Width, viewport.Height * 0.9f) };
+            var mapSprite = new SpriteComponent() { SpriteName = "placeholder_political_world_maphd", Size = new Vector2(viewport.Width*2, viewport.Height * 2) };
             var mapPostion = new PositionComponent() { Position = new Vector2(0, 0) };
             var mapTag = new MapTag();
 
@@ -139,10 +145,24 @@ namespace AmorosRisk
             mapEntity.Attach(mapPostion);
             mapEntity.Attach(mapTag);
 
+            var playerTag = new PlayerTag();
+            var playerCameraTag = new CameraTag();
+            var playerCameraPositon = new PositionComponent() { Position = new Vector2()  };
+            var inputComponent = new InputComponent();
+            var inputReceiver = new InputReceiver();
+
+            var playerEntity = _world.CreateEntity();
+            playerEntity.Attach(playerTag);
+            playerEntity.Attach(playerCameraTag);
+            playerEntity.Attach(playerCameraPositon);
+            playerEntity.Attach(inputComponent);
+            playerEntity.Attach(inputReceiver);
+            PlayerEntityId = playerEntity.Id;
+
             base.Initialize();
         }
-
-		/// <summary>
+        public int PlayerEntityId { get; private set; }
+        /// <summary>
 		/// LoadContent will be called once per game and is the place to load
 		/// all of your content.
 		/// </summary>
