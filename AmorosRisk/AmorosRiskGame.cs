@@ -15,6 +15,10 @@ using NamelessRogue.Engine.Systems;
 using AmorosRisk.Infrastructure.Input;
 using AmorosRisk.Systems;
 using AmorosRisk.Components.UIComponents;
+using EmptyKeys.UserInterface.Mvvm;
+using EmptyKeys.UserInterface.Controls;
+using AmorosRisk.ViewModels;
+using AmorosRisk.Components.IngameObjects;
 
 namespace AmorosRisk
 {
@@ -27,11 +31,21 @@ namespace AmorosRisk
         private int nativeScreenWidth;
         private int nativeScreenHeight;
 
+        WindowRoot _root;
+        RootViewModel _rootViewModel = new RootViewModel();
         World _world;
-        public SystemContext Context { get; set; }
+        InGameMenu _ingameMenu;
+        SpriteBatch spriteBatch;
 
+        public SystemContext Context { get; set; } = SystemContext.MainMenu;
+        public Commander Commander { get; set; }
 
-        public AmorosRiskGame()
+        public WindowRoot UiRoot { get; private set; }
+		public SpriteBatch SpriteBatch { get => spriteBatch; set => spriteBatch = value; }
+
+		private MainMenu _mainMenu;
+
+		public AmorosRiskGame()
             : base()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -46,12 +60,12 @@ namespace AmorosRisk
 
         private void Window_ClientSizeChanged(object sender, EventArgs e)
         {
-            //if (basicUI != null)
-            //{
-            //    Viewport viewPort = GraphicsDevice.Viewport;
-            //    basicUI.Resize(viewPort.Width, viewPort.Height);
-            //}
-        }
+            if (_root != null)
+			{
+				Viewport viewport = GraphicsDevice.Viewport;
+                _root.Resize(viewport.Width, viewport.Height);
+			}
+		}
 
         void graphics_DeviceCreated(object sender, EventArgs e)
         {
@@ -78,50 +92,67 @@ namespace AmorosRisk
         /// </summary>
         protected override void Initialize()
         {
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             Context = SystemContext.MainMenu;
 
             _world = new WorldBuilder()
-                //main menu systems setup
-                .AddSystem(new InputSystem(new MainMenuKeyIntentTranslator(),this, SystemContext.MainMenu))
-                .AddSystem(new MainMenuInputSystem(this, SystemContext.MainMenu))
-                .AddSystem(new MainMenuUiDrawSystem(this, SystemContext.MainMenu))
+                //ui systems setup
+                .AddSystem(new InputSystem(new MainMenuKeyIntentTranslator(), this, SystemContext.MainMenu))
+                .AddSystem(new UiInputSystem(this))
+                .AddSystem(new UiDrawSystem(this))
+                //map draw
+                .AddSystem(new MapDrawSystem(this, SystemContext.InGame))
                 .Build();
 
             Viewport viewport = GraphicsDevice.Viewport;
 
-            var basicUI = new EmptyKeys.UserInterface.Generated.WindowRoot(viewport.Width, viewport.Height);
 
             RelayCommand resizeCommand = new RelayCommand(new Action<object>(OnResize));
             KeyBinding resizeBinding = new KeyBinding(resizeCommand, KeyCode.R, ModifierKeys.Control);
-            basicUI.InputBindings.Add(resizeBinding);
-            var viewModel = new MainMenuScreenViewModel();
-            basicUI.DataContext = viewModel;
-            basicUI.Resize(viewport.Width, viewport.Height);
 
-            var mainMenuUiScreenComponent = new UiScreenComponent() { WindowRoot = basicUI };
-            var mainMenuUiTag = new MainMenuUi();
-            var mainMenuEntity = _world.CreateEntity();
-            mainMenuEntity.Attach(mainMenuUiScreenComponent);
-            mainMenuEntity.Attach(mainMenuUiTag);
+            _root = new WindowRoot(viewport.Width, viewport.Height);
 
+
+            _root.DataContext = _rootViewModel;
+            UiRoot = _root;
+
+            _mainMenu = new EmptyKeys.UserInterface.Generated.MainMenu();
+            var viewModel = new MainMenuScreenViewModel(this);
+            _mainMenu.DataContext = viewModel;
+
+            _ingameMenu= new EmptyKeys.UserInterface.Generated.InGameMenu();
+            var ingameViewModel = new InGameMenuViewModel(this);
+            _ingameMenu.DataContext = ingameViewModel;
+
+            _rootViewModel.ContentWindow = _mainMenu;
+
+            _root.Resize(viewport.Width, viewport.Height);
+
+            //create a map
+            var mapSprite = new SpriteComponent() { SpriteName = "placeholder_political_world_maphd", Size = new Vector2(viewport.Width, viewport.Height * 0.9f) };
+            var mapPostion = new PositionComponent() { Position = new Vector2(0, 0) };
+            var mapTag = new MapTag();
+
+            var mapEntity = _world.CreateEntity();
+            mapEntity.Attach(mapSprite);
+            mapEntity.Attach(mapPostion);
+            mapEntity.Attach(mapTag);
 
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
+		/// <summary>
+		/// LoadContent will be called once per game and is the place to load
+		/// all of your content.
+		/// </summary>
+		protected override void LoadContent()
         {
             this.IsMouseVisible = true;
 
             SpriteFont font = Content.Load<SpriteFont>("Segoe_UI_10_Regular");
             FontManager.DefaultFont = Engine.Instance.Renderer.CreateFont(font);
                 
-
-
             FontManager.Instance.LoadFonts(Content);
             ImageManager.Instance.LoadImages(Content);
             SoundManager.Instance.LoadSounds(Content);
@@ -159,6 +190,13 @@ namespace AmorosRisk
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+
+            if (contextSwitchScheduled)
+            {
+                contextSwitchScheduled = false;
+                Context = contextToChangeTo;
+            }
+
             _world.Update(gameTime);
             base.Update(gameTime);
         }
@@ -174,5 +212,28 @@ namespace AmorosRisk
             _world.Draw(gameTime);
             base.Draw(gameTime);
         }
-    }
+
+        SystemContext contextToChangeTo;
+        bool contextSwitchScheduled;
+	
+
+		internal void ScheduleContextChange(SystemContext context)
+		{
+            contextSwitchScheduled = true;
+            contextToChangeTo = context;
+
+            switch (context)
+            {
+                case SystemContext.MainMenu:
+                    _rootViewModel.ContentWindow = _mainMenu;
+                    break;
+                case SystemContext.InGame:
+                    _rootViewModel.ContentWindow = _ingameMenu;
+                    break;
+                default:
+                    break;
+            }
+
+        }
+	}
 }

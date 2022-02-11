@@ -29,7 +29,7 @@ namespace EmptyKeys.UserInterface.Generated {
         
         private Grid e_0;
         
-        private ContentPresenter e_1;
+        private TabControl e_1;
         
         public WindowRoot() : 
                 base() {
@@ -55,11 +55,19 @@ namespace EmptyKeys.UserInterface.Generated {
             this.Content = this.e_0;
             this.e_0.Name = "e_0";
             // e_1 element
-            this.e_1 = new ContentPresenter();
+            this.e_1 = new TabControl();
             this.e_0.Children.Add(this.e_1);
             this.e_1.Name = "e_1";
-            Binding binding_e_1_Content = new Binding("ContentWindow");
-            this.e_1.SetBinding(ContentPresenter.ContentProperty, binding_e_1_Content);
+            this.e_1.ItemsSource = Get_e_1_Items();
+        }
+        
+        private static System.Collections.ObjectModel.ObservableCollection<object> Get_e_1_Items() {
+            System.Collections.ObjectModel.ObservableCollection<object> items = new System.Collections.ObjectModel.ObservableCollection<object>();
+            // e_2 element
+            TabItem e_2 = new TabItem();
+            e_2.Name = "e_2";
+            items.Add(e_2);
+            return items;
         }
     }
 }

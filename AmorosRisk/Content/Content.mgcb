@@ -37,6 +37,18 @@
 /processorParam:TextureFormat=Color
 /build:Images/CreditButtonRiskPressed.png
 
+#begin Images/placeholder_political_world_maphd.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/placeholder_political_world_maphd.jpg
+
 #begin Images/PlayButtonRisk.png
 /importer:TextureImporter
 /processor:TextureProcessor

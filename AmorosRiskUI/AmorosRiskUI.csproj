@@ -1,8 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors>;NU1605</WarningsAsErrors>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="BasicUi\WindowRoot.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Content>
+    <None Include="WindowRoot.xaml">
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -28,5 +35,14 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="BasicUi\" />
+    <Folder Include="Generated\" />
+  </ItemGroup>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="cd &quot;$(SolutionDir)packages\emptykeysui_generator\3.3.0\tools\&quot;&#xA;&#xA;ekUIGen.exe -i=&quot;$(ProjectDir)\&quot; -o=&quot;$(ProjectDir)..\AmorosRiskUI\Generated&quot; -bd=&quot;$(TargetDir)\&quot; -rm=MonoGame -generate-bindings -da:AmorosRiskUI --ignore-assets" />
+    </Target>
+
 
 </Project>

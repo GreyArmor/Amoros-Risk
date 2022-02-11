@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31605.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmorosRisk", "AmorosRisk\AmorosRisk.csproj", "{EFCBD4B4-9046-4E36-8170-A6E6C1452B96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmorosRiskUI", "AmorosRiskUI\AmorosRiskUI.csproj", "{05A0206F-3490-449F-A9F1-93CE86CFBF4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmorosRiskUI", "AmorosRiskUI\AmorosRiskUI.csproj", "{05A0206F-3490-449F-A9F1-93CE86CFBF4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

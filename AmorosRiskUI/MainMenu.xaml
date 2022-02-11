@@ -1,12 +1,13 @@
-﻿<ek:UIRoot x:Class="AmorosRiskUI.BasicUi.WindowRoot" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl x:Class="AmorosRiskUI.MainMenu" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		   xmlns:ek="clr-namespace:EmptyKeys.UserInterface.Designer;assembly=EmptyKeys.UserInterface.Designer"
-		   xmlns:basicui="clr-namespace:AmorosRiskUI.BasicUi" xmlns:controls="clr-namespace:EmptyKeys.UserInterface.Controls;assembly=EmptyKeys.UserInterface" xmlns:animation="clr-namespace:EmptyKeys.UserInterface.Media.Animation;assembly=EmptyKeys.UserInterface"
+		   xmlns:basicui="clr-namespace:AmorosRiskUI" xmlns:controls="clr-namespace:EmptyKeys.UserInterface.Controls;assembly=EmptyKeys.UserInterface" xmlns:animation="clr-namespace:EmptyKeys.UserInterface.Media.Animation;assembly=EmptyKeys.UserInterface"
 		   mc:Ignorable="d" 
+		   xmlns:local="clr-namespace:AmorosRiskUI" 
              d:DesignHeight="768" d:DesignWidth="1366" Background="CornflowerBlue">
-	<ek:UIRoot.Resources>
+	<UserControl.Resources>
 
 		<Style x:Key="gridImageStyle" TargetType="ek:ImageButton">
 			<Setter Property="Width" Value="auto" />
@@ -21,7 +22,7 @@
 								<ThicknessAnimation.EasingFunction>
 									<SineEase />
 								</ThicknessAnimation.EasingFunction>
-							</ThicknessAnimation>							
+							</ThicknessAnimation>
 						</Storyboard>
 					</BeginStoryboard>
 				</EventTrigger>
@@ -47,10 +48,10 @@
 						</Storyboard>
 					</BeginStoryboard>
 				</EventTrigger>
-			</Style.Triggers>	
+			</Style.Triggers>
 		</Style>
 
-	</ek:UIRoot.Resources>
+	</UserControl.Resources>
 
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -72,25 +73,7 @@
 					<RowDefinition></RowDefinition>
 				</Grid.RowDefinitions>
 
-				<ek:ImageButton Grid.Row="1" Margin="5" Height="auto" Width="auto" Style="{DynamicResource gridImageStyle}">
-					<ek:ImageButton.ImageNormal>
-						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
-					</ek:ImageButton.ImageNormal>
-
-					<ek:ImageButton.ImageHover>
-						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
-					</ek:ImageButton.ImageHover>
-
-					<ek:ImageButton.ImageDisabled>
-						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
-					</ek:ImageButton.ImageDisabled>
-
-					<ek:ImageButton.ImagePressed>
-						<BitmapImage UriSource="Images\\CreditButtonRiskPressed.png"/>
-					</ek:ImageButton.ImagePressed>
-				</ek:ImageButton>
-
-				<ek:ImageButton Grid.Row="0" Margin="5" Height="auto" Width="auto"  Style="{DynamicResource gridImageStyle}">
+				<ek:ImageButton Grid.Row="0" Margin="5" Height="auto" Width="auto"  Style="{DynamicResource gridImageStyle}" Command="{Binding PlayCommand}">
 					<ek:ImageButton.ImageNormal>
 						<BitmapImage UriSource="Images\\PlayButtonRisk.png"/>
 					</ek:ImageButton.ImageNormal>
@@ -108,23 +91,26 @@
 					</ek:ImageButton.ImagePressed>
 				</ek:ImageButton>
 
+				<ek:ImageButton Grid.Row="1" Margin="5" Height="auto" Width="auto" Style="{DynamicResource gridImageStyle}" Command="{Binding CreditsCommand}">
+					<ek:ImageButton.ImageNormal>
+						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
+					</ek:ImageButton.ImageNormal>
 
-				<!--<Grid Grid.Row="0">
-					<Image x:Name="image" Style="{DynamicResource gridImageStyle}" Grid.Row="0" Margin="5" Stretch="Fill" HorizontalAlignment="Center">
-						<Image.Source>
-							UriSource="Images\\PlayButtonRisk.png"
-						</Image.Source>						
-					</Image>
-				</Grid>
-				<Grid Grid.Row="1">
-					<Image  Style="{DynamicResource gridImageStyle}" Grid.Row="1" Margin="5" Stretch="Fill" HorizontalAlignment="Center">
-						<Image.Source>
-							<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>						
-						</Image.Source>						
-					</Image>
-				</Grid>-->
+					<ek:ImageButton.ImageHover>
+						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
+					</ek:ImageButton.ImageHover>
+
+					<ek:ImageButton.ImageDisabled>
+						<BitmapImage UriSource="Images\\CreditButtonRisk.png"/>
+					</ek:ImageButton.ImageDisabled>
+
+					<ek:ImageButton.ImagePressed>
+						<BitmapImage UriSource="Images\\CreditButtonRiskPressed.png"/>
+					</ek:ImageButton.ImagePressed>
+				</ek:ImageButton>
+				
 			</Grid>
 
 		</Grid>
 	</Grid>
-</ek:UIRoot>
+</UserControl>
