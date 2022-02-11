@@ -49,7 +49,7 @@ namespace EmptyKeys.UserInterface.Generated {
         }
         
         private void InitializeComponent() {
-            this.Background = new SolidColorBrush(new ColorW(100, 149, 237, 255));
+            this.Background = new SolidColorBrush(new ColorW(255, 255, 255, 0));
             // e_0 element
             this.e_0 = new Grid();
             this.Content = this.e_0;

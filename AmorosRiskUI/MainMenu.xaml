@@ -6,7 +6,7 @@
 		   xmlns:basicui="clr-namespace:AmorosRiskUI" xmlns:controls="clr-namespace:EmptyKeys.UserInterface.Controls;assembly=EmptyKeys.UserInterface" xmlns:animation="clr-namespace:EmptyKeys.UserInterface.Media.Animation;assembly=EmptyKeys.UserInterface"
 		   mc:Ignorable="d" 
 		   xmlns:local="clr-namespace:AmorosRiskUI" 
-             d:DesignHeight="768" d:DesignWidth="1366" Background="CornflowerBlue">
+             d:DesignHeight="768" d:DesignWidth="1366" Background="Transparent">
 	<UserControl.Resources>
 
 		<Style x:Key="gridImageStyle" TargetType="ek:ImageButton">

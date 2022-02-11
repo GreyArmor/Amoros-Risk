@@ -105,10 +105,11 @@ namespace AmorosRisk
                 .AddSystem(new UiInputSystem(this))
 
                 .AddSystem(new CameraSystem(this, SystemContext.InGame))
-
-                .AddSystem(new UiDrawSystem(this))
                 //map draw
                 .AddSystem(new MapDrawSystem(this, SystemContext.InGame))
+                .AddSystem(new UiDrawSystem(this))
+               
+                
                 .Build();
 
             Viewport viewport = GraphicsDevice.Viewport;

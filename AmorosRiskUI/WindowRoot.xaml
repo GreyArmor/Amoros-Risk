@@ -7,7 +7,7 @@
              xmlns:c="clr-namespace:EmptyKeys.UserInterface.Designer.Charts;assembly=EmptyKeys.UserInterface.Designer" xmlns:amorosriskui="clr-namespace:AmorosRiskUI"
 			 xmlns:local="clr-namespace:AmorosRiskUI" 
 			 mc:Ignorable="d" 
-             d:DesignHeight="768" d:DesignWidth="1366" Background="CornflowerBlue">
+             d:DesignHeight="768" d:DesignWidth="1366" Background="Transparent">
 	<Grid>
 		<ContentPresenter Content="{Binding ContentWindow}"></ContentPresenter>
 		<!--<ContentControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />-->

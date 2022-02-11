@@ -5,7 +5,7 @@
 		   xmlns:ek="clr-namespace:EmptyKeys.UserInterface.Designer;assembly=EmptyKeys.UserInterface.Designer"
 		    xmlns:local="clr-namespace:AmorosRiskUI"
 		   mc:Ignorable="d" 
-             d:DesignHeight="768" d:DesignWidth="1366" Background="CornflowerBlue">
+             d:DesignHeight="768" d:DesignWidth="1366" Background="Transparent">
 	<UserControl.Resources>
 
 		<Style x:Key="gridImageStyle" TargetType="ek:ImageButton">
