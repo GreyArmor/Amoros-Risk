@@ -34,9 +34,9 @@ namespace AmorosRisk.Systems
 				var positio = _positionMapper.Get(entityId);
 				var sprite = _spriteMapper.Get(entityId);
 				var map = game.Content.Load<Texture2D>("Images\\" + sprite.SpriteName);
-				spriteBatch.Draw(map, new Rectangle((int)positio.Position.X, (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
-
-
+				spriteBatch.Draw(map, new Rectangle((int)(positio.Position.X - sprite.Size.X), (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
+				spriteBatch.Draw(map, new Rectangle((int)-positio.Position.X, (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
+				spriteBatch.Draw(map, new Rectangle((int)(positio.Position.X + sprite.Size.X), (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
 			}
 			spriteBatch.End();
 		}

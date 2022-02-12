@@ -80,7 +80,33 @@ namespace AmorosRisk.Systems
 
 							var playerComeraPostion = _positionMapper.Get(game.PlayerEntityId);
 
-							var cameraCommand = new CameraMoveCommand(playerComeraPostion.Position + (moveDirection * cameraScrollSpeed));
+
+							var newPosition = playerComeraPostion.Position + (moveDirection * cameraScrollSpeed);
+
+							var mapSprite = game.World.GetEntity(game.MapEntityId).Get<SpriteComponent>();
+
+
+							if (newPosition.Y < -mapSprite.Size.Y + viewportHeight)
+							{
+								newPosition.Y = -mapSprite.Size.Y + viewportHeight;
+							}
+							if (newPosition.Y > 0)
+							{
+								newPosition.Y = 0;
+							}
+
+
+							if (newPosition.X < -mapSprite.Size.X)
+							{
+								newPosition.X += mapSprite.Size.X;
+							}
+							if (newPosition.X > mapSprite.Size.X)
+							{
+								newPosition.X -= mapSprite.Size.X;
+							}
+
+
+							var cameraCommand = new CameraMoveCommand(newPosition);
 							game.Commander.EnqueueCommand(cameraCommand);
 							break;
 						default:

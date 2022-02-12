@@ -146,6 +146,8 @@ namespace AmorosRisk
             mapEntity.Attach(mapPostion);
             mapEntity.Attach(mapTag);
 
+            MapEntityId = mapEntity.Id;
+
             var playerTag = new PlayerTag();
             var playerCameraTag = new CameraTag();
             var playerCameraPositon = new PositionComponent() { Position = new Vector2()  };
@@ -163,6 +165,7 @@ namespace AmorosRisk
             base.Initialize();
         }
         public int PlayerEntityId { get; private set; }
+        public int MapEntityId { get; private set; }
         /// <summary>
 		/// LoadContent will be called once per game and is the place to load
 		/// all of your content.
