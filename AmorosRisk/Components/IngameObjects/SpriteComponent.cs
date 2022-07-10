@@ -7,7 +7,7 @@ namespace AmorosRisk.Components.IngameObjects
 {
 	internal class SpriteComponent
 	{
-		public string SpriteName;
+		public string SpritePath;
 		public Vector2 Size;
 	}
 }

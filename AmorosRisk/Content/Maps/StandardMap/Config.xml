@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<WorldMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MapPathLocal>World_map_political_ISO.png</MapPathLocal>
+  <MapTerritoryMaskPathLocal>World_map_political_ISO_MASK.png</MapTerritoryMaskPathLocal>
+  <Territories>
+    <Territory>
+      <Id>territory1</Id>
+    </Territory>
+    <Territory>
+      <Id>territory2</Id>
+    </Territory>
+    <Territory>
+      <Id>territory3</Id>
+    </Territory>
+    <Territory>
+      <Id>territory4</Id>
+    </Territory>
+  </Territories>
+  <Connections>
+    <TerritoryConnection FirstTerritory="territory1" SecondTerritory="territory2" ConnectionType="ByLand" />
+    <TerritoryConnection FirstTerritory="territory1" SecondTerritory="territory3" ConnectionType="ByLand" />
+    <TerritoryConnection FirstTerritory="territory1" SecondTerritory="territory4" ConnectionType="BySea" />
+    <TerritoryConnection FirstTerritory="territory2" SecondTerritory="territory3" ConnectionType="ByLand" />
+    <TerritoryConnection FirstTerritory="territory2" SecondTerritory="territory4" ConnectionType="ByLand" />
+    <TerritoryConnection FirstTerritory="territory3" SecondTerritory="territory4" ConnectionType="BySea" />
+  </Connections>
+</WorldMap>

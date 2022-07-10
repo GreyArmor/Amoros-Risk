@@ -15,6 +15,7 @@
     <None Remove="Content\Images\CreditButtonRiskPressed.png" />
     <None Remove="Content\Images\PlayButtonRisk.png" />
     <None Remove="Content\Images\PlayButtonRiskPressed.png" />
+    <None Remove="Content\Maps\worldmap4k.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\CreditButtonRiskPressed.png">
@@ -36,6 +37,8 @@
   <ItemGroup>
     <PackageReference Include="EmptyKeysUI_Generator" Version="3.3.0" />
     <PackageReference Include="EmptyKeysUI_MonoGame" Version="3.3.0" />
+    <PackageReference Include="FloodSpill" Version="1.0.4" />
+    <PackageReference Include="MIConvexHull" Version="1.1.19.1019" />
     <PackageReference Include="MonoGame.Extended" Version="3.8.0" />
     <PackageReference Include="MonoGame.Extended.Entities" Version="3.8.0" />
     <PackageReference Include="MonoGame.Extended.Input" Version="3.8.0" />
@@ -47,5 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AmorosRiskUI\AmorosRiskUI.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Content\Maps\StandardMap\World_map_political_ISO.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Maps\StandardMap\World_map_political_ISO_MASK.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

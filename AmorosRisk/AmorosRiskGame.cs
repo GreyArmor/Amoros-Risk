@@ -20,6 +20,14 @@ using AmorosRisk.ViewModels;
 using AmorosRisk.Components.IngameObjects;
 using AmorosRisk.Components.Player;
 using AmorosRisk.Components.Input;
+using System.Drawing;
+using AmorosRisk.Factories;
+using AmorosRisk.WorldMaps;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+using System.IO;
+using Color = System.Drawing.Color;
+using AmorosRisk.WorldMaps.Utility;
 
 namespace AmorosRisk
 {
@@ -58,7 +66,7 @@ namespace AmorosRisk
             graphics.DeviceCreated += graphics_DeviceCreated;
             Window.ClientSizeChanged += Window_ClientSizeChanged;
             Window.AllowUserResizing = true;
-        }
+        }   
 
         private void Window_ClientSizeChanged(object sender, EventArgs e)
         {
@@ -108,8 +116,8 @@ namespace AmorosRisk
                 //map draw
                 .AddSystem(new MapDrawSystem(this, SystemContext.InGame))
                 .AddSystem(new UiDrawSystem(this))
-               
-                
+
+
                 .Build();
 
             Viewport viewport = GraphicsDevice.Viewport;
@@ -128,7 +136,7 @@ namespace AmorosRisk
             var viewModel = new MainMenuScreenViewModel(this);
             _mainMenu.DataContext = viewModel;
 
-            _ingameMenu= new EmptyKeys.UserInterface.Generated.InGameMenu();
+            _ingameMenu = new EmptyKeys.UserInterface.Generated.InGameMenu();
             var ingameViewModel = new InGameMenuViewModel(this);
             _ingameMenu.DataContext = ingameViewModel;
 
@@ -137,7 +145,7 @@ namespace AmorosRisk
             _root.Resize(viewport.Width, viewport.Height);
 
             //create a map
-            var mapSprite = new SpriteComponent() { SpriteName = "placeholder_political_world_maphd", Size = new Vector2(viewport.Width*2, viewport.Height * 2) };
+            var mapSprite = new SpriteComponent() { SpritePath = "Content\\Maps\\StandardMap\\World_map_political_ISO.png", Size = new Vector2(viewport.Width, viewport.Height) };
             var mapPostion = new PositionComponent() { Position = new Vector2(0, 0) };
             var mapTag = new MapTag();
 
@@ -150,7 +158,7 @@ namespace AmorosRisk
 
             var playerTag = new PlayerTag();
             var playerCameraTag = new CameraTag();
-            var playerCameraPositon = new PositionComponent() { Position = new Vector2()  };
+            var playerCameraPositon = new PositionComponent() { Position = new Vector2() };
             var inputComponent = new InputComponent();
             var inputReceiver = new InputReceiver();
 
@@ -161,6 +169,38 @@ namespace AmorosRisk
             playerEntity.Attach(inputComponent);
             playerEntity.Attach(inputReceiver);
             PlayerEntityId = playerEntity.Id;
+
+
+            var bitmap = new Bitmap("Content\\Maps\\StandardMap\\World_map_political_ISO_MASK.png");
+            var detectionColor = Color.FromArgb(255,255,16,240);
+            var borderColor = Color.White;
+            var territories = TerritoryHelper.DetectTerritories(borderColor, detectionColor, bitmap);
+
+            var world = new WorldMaps.WorldMap();
+
+
+            var connections = new List<TerritoryConnection>() {
+                new TerritoryConnection() { FirstTerritory = "territory1", SecondTerritory = "territory2", ConnectionType = TerritoryConnectionType.ByLand },
+                new TerritoryConnection() { FirstTerritory = "territory1", SecondTerritory = "territory3", ConnectionType = TerritoryConnectionType.ByLand },
+                new TerritoryConnection() { FirstTerritory = "territory1", SecondTerritory = "territory4", ConnectionType = TerritoryConnectionType.BySea },
+                new TerritoryConnection() { FirstTerritory = "territory2", SecondTerritory = "territory3", ConnectionType = TerritoryConnectionType.ByLand },
+                new TerritoryConnection() { FirstTerritory = "territory2", SecondTerritory = "territory4", ConnectionType = TerritoryConnectionType.ByLand },
+                new TerritoryConnection() { FirstTerritory = "territory3", SecondTerritory = "territory4", ConnectionType = TerritoryConnectionType.BySea }, };
+
+
+            world.MapPathLocal = "test.png";
+            world.MapTerritoryMaskPathLocal = "testmask.png";
+            world.Territories.AddRange(territories);
+            world.Connections = connections;
+
+            mapEntity.Attach(world);
+            mapEntity.Attach(new HighlightPolygonCollection(territories, this));
+
+            //XmlSerializer ser = new XmlSerializer(typeof(WorldMap));
+            //ser.Serialize(File.OpenWrite("text.xml"), world);
+
+
+
 
             base.Initialize();
         }
@@ -232,7 +272,7 @@ namespace AmorosRisk
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Microsoft.Xna.Framework.Color.DarkGray);
             _world.Draw(gameTime);
             base.Draw(gameTime);
         }

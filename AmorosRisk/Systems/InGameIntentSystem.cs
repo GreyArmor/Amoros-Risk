@@ -45,7 +45,7 @@ namespace AmorosRisk.Systems
 						case Infrastructure.Input.IntentEnum.MouseMoving:
 
 							//todo: move to contants storage file
-							const int cameraScrollSpeed = 25;
+							const int cameraScrollSpeed = 15;
 
 							Vector2 moveDirection = Vector2.Zero;
 
