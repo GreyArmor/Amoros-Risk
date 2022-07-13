@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FloodSpill;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Shapes;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,12 @@ namespace AmorosRisk.WorldMaps
 		public int NumberOfTroops { get; set; } = 0;
 
 		[XmlIgnore]
-		public Polygon Polygon { get; set; }
+		public Position Position { get; set; }
+
+		[XmlIgnore]
+		public Position Size { get; set; }
+
+
 
 	}
 }

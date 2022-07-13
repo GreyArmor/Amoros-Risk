@@ -12,20 +12,16 @@ namespace AmorosRisk.Components.UIComponents
 {
 	public class HighlightPolygon
 	{
-		public HighlightPolygon(Territory territory, AmorosRiskGame game) {
+		public HighlightPolygon(Territory territory, WorldMap world, AmorosRiskGame game) {
 			TerritoryId = territory.Id;
 			IsVisible = false;
 
-			var bounds = territory.Polygon.BoundingRectangle;
-
-			Bitmap bitmap = new Bitmap((int)bounds.Width, (int)bounds.Height);
-
-
-			for (int x = 0; x < bounds.Width; x++)
+			Bitmap bitmap = new Bitmap(territory.Size.X, territory.Size.Y);
+			for (int x = 0; x < territory.Size.X; x++)
 			{
-				for (int y = 0; y < bounds.Height; y++)
+				for (int y = 0; y < territory.Size.Y; y++)
 				{
-					if (territory.Polygon.Contains(x + bounds.X, y + bounds.Y))
+					if (world.HitboxBuffer[x + territory.Position.X, y + territory.Position.Y] == territory.Id)
 					{
 						bitmap.SetPixel(x, y, Color.FromArgb(255, 255, 0, 0));
 					}
@@ -35,7 +31,7 @@ namespace AmorosRisk.Components.UIComponents
 					}
 				}
 			}
-
+			bitmap.Save("tttt" + territory.Id + ".png");
 			using (MemoryStream s = new MemoryStream())
 			{
 				bitmap.Save(s, System.Drawing.Imaging.ImageFormat.Png);

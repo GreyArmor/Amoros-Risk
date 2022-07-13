@@ -145,7 +145,7 @@ namespace AmorosRisk
             _root.Resize(viewport.Width, viewport.Height);
 
             //create a map
-            var mapSprite = new SpriteComponent() { SpritePath = "Content\\Maps\\StandardMap\\World_map_political_ISO.png", Size = new Vector2(viewport.Width, viewport.Height) };
+            var mapSprite = new SpriteComponent() { SpritePath = "Content\\Maps\\StandardMap\\World_map_political_ISO.png", Size = new Vector2(viewport.Width * 2, viewport.Height * 2) };
             var mapPostion = new PositionComponent() { Position = new Vector2(0, 0) };
             var mapTag = new MapTag();
 
@@ -174,7 +174,7 @@ namespace AmorosRisk
             var bitmap = new Bitmap("Content\\Maps\\StandardMap\\World_map_political_ISO_MASK.png");
             var detectionColor = Color.FromArgb(255,255,16,240);
             var borderColor = Color.White;
-            var territories = TerritoryHelper.DetectTerritories(borderColor, detectionColor, bitmap);
+            TerritoryHelper.DetectTerritories(borderColor, detectionColor, bitmap, out var hitboxMap, out var territories);
 
             var world = new WorldMaps.WorldMap();
 
@@ -192,9 +192,9 @@ namespace AmorosRisk
             world.MapTerritoryMaskPathLocal = "testmask.png";
             world.Territories.AddRange(territories);
             world.Connections = connections;
-
+            world.HitboxBuffer = hitboxMap;
             mapEntity.Attach(world);
-            mapEntity.Attach(new HighlightPolygonCollection(territories, this));
+            mapEntity.Attach(new HighlightPolygonCollection(world, this));
 
             //XmlSerializer ser = new XmlSerializer(typeof(WorldMap));
             //ser.Serialize(File.OpenWrite("text.xml"), world);

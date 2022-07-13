@@ -7,12 +7,12 @@ namespace AmorosRisk.Components.UIComponents
 {
 	public class HighlightPolygonCollection
 	{
-		public HighlightPolygonCollection(ICollection<Territory> territories, AmorosRiskGame game)
+		public HighlightPolygonCollection(WorldMap world, AmorosRiskGame game)
 		{
 			TerritoryPolygons = new Dictionary<string, HighlightPolygon>();
-			foreach (var territory in territories)
+			foreach (var territory in world.Territories)
 			{
-				TerritoryPolygons.Add(territory.Id, new HighlightPolygon(territory, game));
+				TerritoryPolygons.Add(territory.Id, new HighlightPolygon(territory, world, game));
 			}
 		}
 		public Dictionary<string,HighlightPolygon> TerritoryPolygons { get; set; }

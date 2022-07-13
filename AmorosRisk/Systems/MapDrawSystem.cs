@@ -2,6 +2,7 @@
 using AmorosRisk.Components.UIComponents;
 using AmorosRisk.Infrastructure;
 using AmorosRisk.WorldMaps;
+using AmorosRisk.WorldMaps.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
@@ -9,6 +10,8 @@ using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace AmorosRisk.Systems
@@ -37,7 +40,9 @@ namespace AmorosRisk.Systems
 			var cameraPosition = _positionMapper.Get(game.PlayerEntityId).Position;
 
 			spriteBatch.Begin(transformMatrix:Matrix.CreateTranslation(cameraPosition.X,cameraPosition.Y,0));
-			var territories = _worldMapper.Get(game.MapEntityId).Territories;
+			
+			var world = _worldMapper.Get(game.MapEntityId);
+			var territories = world.Territories;
 			foreach (var entityId in ActiveEntities)
 			{
 				var positio = _positionMapper.Get(entityId);
@@ -54,21 +59,29 @@ namespace AmorosRisk.Systems
 				spriteBatch.Draw(map, new Rectangle((int)-positio.Position.X, (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
 				spriteBatch.Draw(map, new Rectangle((int)(positio.Position.X + sprite.Size.X-1), (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
 
-				//then draw the highlights
-				var mousePos = MouseExtended.GetState().Position.ToVector2() / mapAspectRatio;
+				//scroll mouse position
+				var windowSize = new Vector2(game.Window.ClientBounds.Width, game.Window.ClientBounds.Height);
+				
+				var rawMousePos = MouseExtended.GetState().Position.ToVector2();
+
+				var mousePos = ScrollingMathHelper.GetMouseWorldMapPosititon(rawMousePos,cameraPosition,windowSize,sprite.Size, mapAspectRatio);
+
+
 				var collection = _highlightPolygonCollectionMapper.Get(entityId);
 
+				//debug mouse draw
+				//spriteBatch.Draw(map, new Rectangle((int)mousePos.X, (int)mousePos.Y, 10, 10), Color.Yellow);
 
-				spriteBatch.Draw(map, new Rectangle((int)mousePos.X, (int)mousePos.Y, 10, 10), Color.Yellow);
-
+				var territoryId = world.HitboxBuffer[(int)mousePos.X, (int)mousePos.Y];
+				//then draw the highlights
 				foreach (var territory in territories)
 				{
-					if (territory.Polygon.Contains(mousePos))
+					if (world.HitboxBuffer[(int)mousePos.X, (int)mousePos.Y] == territory.Id)
 					{
-						var polygonBounds = territory.Polygon.BoundingRectangle;
+						var polygonBounds = new Rectangle(territory.Position.X, territory.Position.Y,territory.Size.X,territory.Size.Y) ;
 						var polygon = collection.TerritoryPolygons[territory.Id].PolygonImage;
 
-						var mask = Color.White;
+						var mask = Color.White * 0.75f;
 
 						spriteBatch.Draw(polygon,
 							new Rectangle(

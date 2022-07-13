@@ -21,5 +21,10 @@ namespace AmorosRisk.WorldMaps
 		[XmlArray]
 		public List<TerritoryConnection> Connections { get; set; } = new List<TerritoryConnection>(); 
 
+		//contains a buffer thats the size of the map, and each cell contains a territory id
+		[XmlIgnore]
+		public string[,] HitboxBuffer { get; set; }
+
+
 	}
 }
