@@ -14,13 +14,13 @@ namespace AmorosRisk.Systems
 	class CameraSystem : EntityUpdateSystem
 	{
 		private readonly AmorosRiskGame game;
-		private readonly SystemContext contex;
+		private readonly SystemContext context;
 		private ComponentMapper<PositionComponent> _positionMapper;
 
 		public CameraSystem(AmorosRiskGame game, SystemContext contex):base(Aspect.All(typeof(CameraTag), typeof(PositionComponent)))
 		{
 			this.game = game;
-			this.contex = contex;
+			this.context = contex;
 		}
 
 		public override void Initialize(IComponentMapperService mapperService)
@@ -30,7 +30,7 @@ namespace AmorosRisk.Systems
 
 		public override void Update(GameTime gameTime)
 		{
-			if (game.Context != contex) return;
+			if (game.Context != context) return;
 
 			while (game.Commander.DequeueCommand<CameraMoveCommand>(out CameraMoveCommand command))
 			{

@@ -11,6 +11,7 @@ namespace AmorosRisk.Infrastructure.Input
     {
         None,
         MouseMoving,
+        MouseClick,
     }
 
     public class Intent

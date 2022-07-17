@@ -52,10 +52,10 @@
     <ProjectReference Include="..\AmorosRiskUI\AmorosRiskUI.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Content\Maps\StandardMap\World_map_political_ISO.png">
+    <None Update="Content\Maps\StandardMap\standardMap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Content\Maps\StandardMap\World_map_political_ISO_MASK.png">
+    <None Update="Content\Maps\StandardMap\standardMapMask.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

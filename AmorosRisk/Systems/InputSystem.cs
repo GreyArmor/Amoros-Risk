@@ -19,7 +19,17 @@ namespace AmorosRisk.Systems
 		IKeyIntentTraslator translator;
 		private readonly AmorosRiskGame game;
 		private readonly SystemContext context;
+		bool inputTriggered;
+		private double previousGametimeForMove = 0;
 
+		int inputsTimeLimit = 30;
+
+		private char lastCommand = char.MinValue;
+		private KeyboardState lastState;
+		private MouseStateExtended lastMouseState;
+		private ComponentMapper<InputComponent> _inputComponentMapper;
+		private ComponentMapper<InputReceiver> _inpurReceiverMapper;
+		private MouseListener _mouseListener;
 		public InputSystem(IKeyIntentTraslator translator, AmorosRiskGame game, SystemContext context) : base(Aspect.All(typeof(InputComponent), typeof(InputReceiver)))
 		{
 			this.translator = translator;
@@ -32,36 +42,38 @@ namespace AmorosRisk.Systems
 			_mouseListener.MouseDoubleClicked += MouseListener_MouseClicked;
 			_mouseListener.MouseDown += MouseListener_MouseClicked;
 			_mouseListener.MouseUp += MouseListener_MouseClicked;
-		}
+			_mouseListener.MouseMoved += MouseListener_MouseMove;
 
+			game.Components.Add(new InputListenerComponent(game, _mouseListener));
+		}
+		
 		private void MouseListener_MouseClicked(object sender, MouseEventArgs e)
 		{
 			lastMouseState = MouseExtended.GetState();
+			inputTriggered = true;
+		}
+
+		private void MouseListener_MouseMove(object sender, MouseEventArgs e)
+		{
+			lastMouseState = MouseExtended.GetState();
+			inputTriggered = true;
 		}
 
 		private void Window_KeyDown(object sender, InputKeyEventArgs e)
 		{
 			lastState = Keyboard.GetState();
 			lastMouseState = MouseExtended.GetState();
+			inputTriggered = true;
 		}
 
-		long currentgmatime = 0;
-		private double previousGametimeForMove = 0;
 
-		int inputsTimeLimit = 30;
-
-		private char lastCommand = char.MinValue;
-		private KeyboardState lastState;
-		private MouseStateExtended lastMouseState;
-		private ComponentMapper<InputComponent> _inputComponentMapper;
-		private ComponentMapper<InputReceiver> _inpurReceiverMapper;
-		private MouseListener _mouseListener;
 
 		private void WindowOnTextInput(object sender, TextInputEventArgs e)
 		{
 			lastCommand = e.Character;
 			lastState = Keyboard.GetState();
 			lastMouseState = MouseExtended.GetState();
+			inputTriggered = true;
 		}
 
 		public override void Update(GameTime gameTime)
@@ -71,20 +83,25 @@ namespace AmorosRisk.Systems
 			if (gameTime.TotalGameTime.TotalMilliseconds - previousGametimeForMove > inputsTimeLimit)
 			{
 				previousGametimeForMove = gameTime.TotalGameTime.TotalMilliseconds;
-				foreach (var entity in ActiveEntities)
+				if (inputTriggered)
 				{
-					InputComponent inputComponent = _inputComponentMapper.Get(entity);
-					InputReceiver receiver = _inpurReceiverMapper.Get(entity);
-					if (receiver != null && inputComponent != null && lastState != default)
+					foreach (var entity in ActiveEntities)
 					{
-						inputComponent.Intents.AddRange(translator.Translate(lastState.GetPressedKeys(), lastCommand, lastMouseState));
+						InputComponent inputComponent = _inputComponentMapper.Get(entity);
+						InputReceiver receiver = _inpurReceiverMapper.Get(entity);
+						if (receiver != null && inputComponent != null && lastState != default)
+						{
+							inputComponent.Intents.AddRange(translator.Translate(lastState.GetPressedKeys(), lastCommand, lastMouseState));
+
+						}
+						else
+						{
+							inputComponent.Intents.AddRange(translator.Translate(null, default, lastMouseState));
+						}
 						lastCommand = char.MinValue;
 						lastState = default;
 						lastMouseState = default;
-					}
-					else
-					{
-						inputComponent.Intents.AddRange(translator.Translate(null, default, MouseExtended.GetState()));
+						inputTriggered = false;
 					}
 				}
 			}

@@ -45,15 +45,15 @@ namespace AmorosRisk
 		private World _world;
         InGameMenu _ingameMenu;
         SpriteBatch spriteBatch;
-
+       
         public SystemContext Context { get; set; } = SystemContext.MainMenu;
         public Commander Commander { get; set; }
 
         public WindowRoot UiRoot { get; private set; }
 		public SpriteBatch SpriteBatch { get => spriteBatch; set => spriteBatch = value; }
 		public World World { get => _world; private set => _world = value; }
-
-		private MainMenu _mainMenu;
+        public SpriteFont GameFont { get; set; }
+        private MainMenu _mainMenu;
 
 		public AmorosRiskGame()
             : base()
@@ -102,6 +102,7 @@ namespace AmorosRisk
         /// </summary>
         protected override void Initialize()
         {
+         
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             Context = SystemContext.MainMenu;
@@ -113,6 +114,7 @@ namespace AmorosRisk
                 .AddSystem(new UiInputSystem(this))
 
                 .AddSystem(new CameraSystem(this, SystemContext.InGame))
+                .AddSystem(new MapClickSystem(this, SystemContext.InGame))
                 //map draw
                 .AddSystem(new MapDrawSystem(this, SystemContext.InGame))
                 .AddSystem(new UiDrawSystem(this))
@@ -144,8 +146,23 @@ namespace AmorosRisk
 
             _root.Resize(viewport.Width, viewport.Height);
 
+            var world = new WorldMaps.WorldMap();
+
+            var connections = new List<TerritoryConnection>() {
+                new TerritoryConnection() { FirstTerritory = "territory1", SecondTerritory = "territory2", ConnectionType = TerritoryConnectionType.ByLand },
+                new TerritoryConnection() { FirstTerritory = "territory1", SecondTerritory = "territory3", ConnectionType = TerritoryConnectionType.ByLand },
+                new TerritoryConnection() { FirstTerritory = "territory1", SecondTerritory = "territory4", ConnectionType = TerritoryConnectionType.BySea },
+                new TerritoryConnection() { FirstTerritory = "territory2", SecondTerritory = "territory3", ConnectionType = TerritoryConnectionType.ByLand },
+                new TerritoryConnection() { FirstTerritory = "territory2", SecondTerritory = "territory4", ConnectionType = TerritoryConnectionType.ByLand },
+                new TerritoryConnection() { FirstTerritory = "territory3", SecondTerritory = "territory4", ConnectionType = TerritoryConnectionType.BySea }, };
+
+
+            world.MapPathLocal = Constants.MapLocationPath + "StandardMap\\standardMap.png";
+            world.MapTerritoryMaskPathLocal = Constants.MapLocationPath + "StandardMap\\standardMapMask.png"; ;
+          
+
             //create a map
-            var mapSprite = new SpriteComponent() { SpritePath = "Content\\Maps\\StandardMap\\World_map_political_ISO.png", Size = new Vector2(viewport.Width * 2, viewport.Height * 2) };
+            var mapSprite = new SpriteComponent(this, world.MapPathLocal, new Vector2(viewport.Width, viewport.Height));
             var mapPostion = new PositionComponent() { Position = new Vector2(0, 0) };
             var mapTag = new MapTag();
 
@@ -171,36 +188,19 @@ namespace AmorosRisk
             PlayerEntityId = playerEntity.Id;
 
 
-            var bitmap = new Bitmap("Content\\Maps\\StandardMap\\World_map_political_ISO_MASK.png");
+            var bitmap = new Bitmap(world.MapTerritoryMaskPathLocal);
             var detectionColor = Color.FromArgb(255,255,16,240);
             var borderColor = Color.White;
-            TerritoryHelper.DetectTerritories(borderColor, detectionColor, bitmap, out var hitboxMap, out var territories);
+            TerritoryDetector.DetectTerritories(borderColor, detectionColor, bitmap, out var hitboxMap, out var territories);
 
-            var world = new WorldMaps.WorldMap();
-
-
-            var connections = new List<TerritoryConnection>() {
-                new TerritoryConnection() { FirstTerritory = "territory1", SecondTerritory = "territory2", ConnectionType = TerritoryConnectionType.ByLand },
-                new TerritoryConnection() { FirstTerritory = "territory1", SecondTerritory = "territory3", ConnectionType = TerritoryConnectionType.ByLand },
-                new TerritoryConnection() { FirstTerritory = "territory1", SecondTerritory = "territory4", ConnectionType = TerritoryConnectionType.BySea },
-                new TerritoryConnection() { FirstTerritory = "territory2", SecondTerritory = "territory3", ConnectionType = TerritoryConnectionType.ByLand },
-                new TerritoryConnection() { FirstTerritory = "territory2", SecondTerritory = "territory4", ConnectionType = TerritoryConnectionType.ByLand },
-                new TerritoryConnection() { FirstTerritory = "territory3", SecondTerritory = "territory4", ConnectionType = TerritoryConnectionType.BySea }, };
-
-
-            world.MapPathLocal = "test.png";
-            world.MapTerritoryMaskPathLocal = "testmask.png";
             world.Territories.AddRange(territories);
             world.Connections = connections;
             world.HitboxBuffer = hitboxMap;
             mapEntity.Attach(world);
             mapEntity.Attach(new HighlightPolygonCollection(world, this));
 
-            //XmlSerializer ser = new XmlSerializer(typeof(WorldMap));
-            //ser.Serialize(File.OpenWrite("text.xml"), world);
 
-
-
+            MouseHelper.Init(this, mapSprite, world);
 
             base.Initialize();
         }
@@ -215,6 +215,7 @@ namespace AmorosRisk
             this.IsMouseVisible = true;
 
             SpriteFont font = Content.Load<SpriteFont>("Segoe_UI_10_Regular");
+            GameFont = font;
             FontManager.DefaultFont = Engine.Instance.Renderer.CreateFont(font);
                 
             FontManager.Instance.LoadFonts(Content);

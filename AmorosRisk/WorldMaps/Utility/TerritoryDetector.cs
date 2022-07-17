@@ -23,7 +23,7 @@ namespace AmorosRisk.WorldMaps.Utility
 		public Position position;
 		public int weight;
 	}
-	public static class TerritoryHelper
+	public static class TerritoryDetector
 	{
 		public static void DetectTerritories(Color borderColor, Color detectionColor, Bitmap worldMapMask, out string[,] hitboxMap, out List<Territory> territories)
 		{
@@ -86,13 +86,15 @@ namespace AmorosRisk.WorldMaps.Utility
 				//var c = Color.FromArgb(255, random.Next(0, 255), random.Next(0, 255), random.Next(0, 255));
 				var id = Guid.NewGuid().ToString();
 				var b = BoundingBox.CreateFromPoints(detected.Select(p => new Vector3(p.X, p.Y, 0)));
+				var convexHull = ConvexHull.Create2D(detected.Select(p => new double[2] { p.X, p.Y }).ToList()).Result;
 				var terWidth = b.Max.X - b.Min.X;
 				var terHeight = b.Max.Y - b.Min.Y;
 				territories.Add(new Territory()
 				{
 					Id = id,
 					Position = new Position((int)b.Min.X, (int)b.Min.Y),
-					Size = new Position((int)terWidth, (int)terHeight)
+					Size = new Position((int)terWidth, (int)terHeight),
+					Center = convexHull.Select(x=>new Vector2((float)x.X, (float)x.Y)).Aggregate((a,b)=> { return a + b; }) / convexHull.Count
 				});
 
 				foreach (var pixel in detected)

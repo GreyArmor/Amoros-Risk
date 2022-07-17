@@ -41,6 +41,8 @@ namespace AmorosRisk.WorldMaps
 
 		[XmlIgnore]
 		public Position Size { get; set; }
+		[XmlIgnore]
+		public Vector2 Center { get; set; }
 
 
 

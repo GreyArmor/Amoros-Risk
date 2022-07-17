@@ -14,19 +14,24 @@ namespace AmorosRisk.Infrastructure.Input
 			List<Intent> result = new List<Intent>();
 			////TODO: Add dictionary for actions, based on game config files
 
-			if (keyCodes == null || keyCodes.Length == 0)
+			if (mouseState.LeftButton == ButtonState.Pressed && !mouseState.WasButtonJustDown(MouseButton.Left))
+			{
+				result.Add(new Intent(null, lastCommand, mouseState, true) { Intention = IntentEnum.MouseClick });
+			} 
+			else if (keyCodes == null || keyCodes.Length == 0)
 			{
 				result.Add(new Intent(null, lastCommand, mouseState, true) { Intention = IntentEnum.MouseMoving });
 			}
+
 			else
 			{
 				for (int i = 0; i < keyCodes.Length; i++)
 				{
 					var keyCode = keyCodes[i];
-					Intent intent = new Intent(keyCodes.ToList(), lastCommand,mouseState, false);
+					Intent intent = new Intent(keyCodes.ToList(), lastCommand, mouseState, false);
 					result.Add(intent);
 					switch (keyCode)
-					{}
+					{ }
 				}
 			}
 

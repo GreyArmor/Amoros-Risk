@@ -19,7 +19,13 @@ namespace AmorosRisk.WorldMaps
 		public List<Territory> Territories { get; set; } = new List<Territory>();
 
 		[XmlArray]
-		public List<TerritoryConnection> Connections { get; set; } = new List<TerritoryConnection>(); 
+		public List<TerritoryConnection> Connections { get; set; } = new List<TerritoryConnection>();
+
+		[XmlElement(IsNullable = false)]
+		public string DetectColor { get; set; }
+
+		[XmlElement(IsNullable = false)]
+		public string BorderColor { get; set; }
 
 		//contains a buffer thats the size of the map, and each cell contains a territory id
 		[XmlIgnore]

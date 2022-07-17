@@ -6,6 +6,7 @@ using AmorosRisk.Components.Input;
 using AmorosRisk.Components.Player;
 using AmorosRisk.Infrastructure;
 using AmorosRisk.Infrastructure.Commands;
+using AmorosRisk.WorldMaps.Utility;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
@@ -35,6 +36,7 @@ namespace AmorosRisk.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			var cameraPosition = _positionMapper.Get(game.PlayerEntityId).Position;
 			foreach (var entity in ActiveEntities)
 			{
 				var input = _inputComponentMapper.Get(entity);
@@ -44,8 +46,7 @@ namespace AmorosRisk.Systems
 					{
 						case Infrastructure.Input.IntentEnum.MouseMoving:
 
-							//todo: move to contants storage file
-							const int cameraScrollSpeed = 15;
+							int cameraScrollSpeed = Constants.CameraScrollSpeed;
 
 							Vector2 moveDirection = Vector2.Zero;
 
@@ -109,10 +110,19 @@ namespace AmorosRisk.Systems
 							var cameraCommand = new CameraMoveCommand(newPosition);
 							game.Commander.EnqueueCommand(cameraCommand);
 							break;
+						case Infrastructure.Input.IntentEnum.MouseClick:
+							var territoryId = MouseHelper.GetTerritoryUnderMouse(cameraPosition);
+							if (territoryId != null)
+							{
+								var clickCommand = new MapClickCommand(territoryId);
+								game.Commander.EnqueueCommand(clickCommand);
+							}
+							break;
 						default:
 							break;
 					}
 				}
+				input.Intents.Clear();
 			}
 		}
 	}

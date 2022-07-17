@@ -3,6 +3,7 @@ using AmorosRisk.Components.UIComponents;
 using AmorosRisk.Infrastructure;
 using AmorosRisk.WorldMaps;
 using AmorosRisk.WorldMaps.Utility;
+using FloodSpill;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Entities;
@@ -24,9 +25,6 @@ namespace AmorosRisk.Systems
 		private ComponentMapper<HighlightPolygonCollection> _highlightPolygonCollectionMapper;
 		private AmorosRiskGame game;
 		private SystemContext context;
-		private Texture2D map;
-		private Vector2 mapAspectRatio;
-		private Vector2 mapAspectRatioInverted;
 
 		public MapDrawSystem(AmorosRiskGame game, SystemContext context) : base(Aspect.All(typeof(MapTag), typeof(PositionComponent), typeof(SpriteComponent))){
 			this.game = game;
@@ -43,28 +41,24 @@ namespace AmorosRisk.Systems
 			
 			var world = _worldMapper.Get(game.MapEntityId);
 			var territories = world.Territories;
+
 			foreach (var entityId in ActiveEntities)
 			{
 				var positio = _positionMapper.Get(entityId);
 				var sprite = _spriteMapper.Get(entityId);
-				if (map == null)
-				{
-					//load only once
-					map = Texture2D.FromFile(game.GraphicsDevice, sprite.SpritePath);
-					mapAspectRatio = new Vector2(sprite.Size.X / map.Width, sprite.Size.Y / map.Height);
-					mapAspectRatioInverted = new Vector2(map.Width / sprite.Size.X,map.Height / sprite.Size.Y);
-				}
+				var map = sprite.Texture;
+				var mapAspectRatio = sprite.SizeAspectRatio;
+
 				//draw the map
-				spriteBatch.Draw(map, new Rectangle((int)(positio.Position.X - sprite.Size.X+1), (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
+				spriteBatch.Draw(map, new Rectangle((int)(positio.Position.X - sprite.Size.X + 1), (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
 				spriteBatch.Draw(map, new Rectangle((int)-positio.Position.X, (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
-				spriteBatch.Draw(map, new Rectangle((int)(positio.Position.X + sprite.Size.X-1), (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
+				spriteBatch.Draw(map, new Rectangle((int)(positio.Position.X + sprite.Size.X - 1), (int)positio.Position.Y, (int)sprite.Size.X, (int)sprite.Size.Y), Color.White);
 
 				//scroll mouse position
-				var windowSize = new Vector2(game.Window.ClientBounds.Width, game.Window.ClientBounds.Height);
-				
-				var rawMousePos = MouseExtended.GetState().Position.ToVector2();
 
-				var mousePos = ScrollingMathHelper.GetMouseWorldMapPosititon(rawMousePos,cameraPosition,windowSize,sprite.Size, mapAspectRatio);
+				var windowSize = new Vector2(game.Window.ClientBounds.Width, game.Window.ClientBounds.Height);
+				var rawMousePos = MouseExtended.GetState().Position.ToVector2();
+				var mousePos = ScrollingMathHelper.GetMouseWorldMapPosititon(rawMousePos, cameraPosition, windowSize, sprite.Size, mapAspectRatio);
 
 
 				var collection = _highlightPolygonCollectionMapper.Get(entityId);
@@ -72,13 +66,14 @@ namespace AmorosRisk.Systems
 				//debug mouse draw
 				//spriteBatch.Draw(map, new Rectangle((int)mousePos.X, (int)mousePos.Y, 10, 10), Color.Yellow);
 
-				var territoryId = world.HitboxBuffer[(int)mousePos.X, (int)mousePos.Y];
+				var territoryId = MouseHelper.GetTerritoryUnderMouse(cameraPosition);
+
 				//then draw the highlights
 				foreach (var territory in territories)
 				{
 					if (world.HitboxBuffer[(int)mousePos.X, (int)mousePos.Y] == territory.Id)
 					{
-						var polygonBounds = new Rectangle(territory.Position.X, territory.Position.Y,territory.Size.X,territory.Size.Y) ;
+						var polygonBounds = new Rectangle(territory.Position.X, territory.Position.Y, territory.Size.X, territory.Size.Y);
 						var polygon = collection.TerritoryPolygons[territory.Id].PolygonImage;
 
 						var mask = Color.White * 0.75f;
@@ -94,9 +89,9 @@ namespace AmorosRisk.Systems
 
 						spriteBatch.Draw(polygon,
 							new Rectangle(
-							(int)(polygonBounds.X * mapAspectRatio.X), 
-							(int)(polygonBounds.Y * mapAspectRatio.Y), 
-							(int)(polygonBounds.Width * mapAspectRatio.X), 
+							(int)(polygonBounds.X * mapAspectRatio.X),
+							(int)(polygonBounds.Y * mapAspectRatio.Y),
+							(int)(polygonBounds.Width * mapAspectRatio.X),
 							(int)(polygonBounds.Height * mapAspectRatio.Y)
 							),
 							mask);
@@ -112,7 +107,11 @@ namespace AmorosRisk.Systems
 						break;
 					}
 				}
-
+				//Dram the number of troops
+				foreach (var territory in territories)
+				{
+					spriteBatch.DrawString(game.GameFont, territory.NumberOfTroops.ToString(), territory.Center * mapAspectRatio, Color.White, 0, Vector2.Zero, 1.2f, SpriteEffects.None, 1);
+				}
 			}
 
 			spriteBatch.End();
